@@ -24,7 +24,8 @@ module Rack
           response = Passbook::PassbookNotification.latest_pass(method_and_params[:params])
           if response
             [200, {'Content-Type' => 'application/vnd.apple.pkpass', 
-              'Content-Disposition' => 'attachment', 
+              'Content-Disposition' => 'attachment',
+              'Last-Modified' => Time.now.httpdate,
               'filename' => "#{method_and_params[:params]['serialNumber']}.pkpass"}, [response]]
           else
             [204, {}, {}]
