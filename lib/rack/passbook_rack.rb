@@ -18,7 +18,9 @@ module Rack
             [Passbook::PassbookNotification.unregister_pass(method_and_params[:params])[:status], {}, {}]
           end
         when 'passes_for_device'
-          response = Passbook::PassbookNotification.passes_for_device(method_and_params[:params])
+          # Merge the url params with the passbook parameters for usage in PassbookNotification
+          parameters = method_and_params[:params].merge(Rack::Request.new(env).params)
+          response = Passbook::PassbookNotification.passes_for_device( parameters )
           [response ? 200 : 204, {}, [response.to_json]]
         when 'latest_pass'
           response = Passbook::PassbookNotification.latest_pass(method_and_params[:params])
