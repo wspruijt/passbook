@@ -48,9 +48,13 @@ module Rack
     def each(&block)
     end
 
-
+    # TODO: Use regexes in stead of split in this method
     def find_method(path)
       parsed_path = path.split '/'
+
+      # Make sure this api doesn't conflict with /api paths
+      return nil if parsed_path[1] == "api"
+
       url_beginning = parsed_path.index 'v1'
       if url_beginning
         args_length = parsed_path.size - url_beginning
